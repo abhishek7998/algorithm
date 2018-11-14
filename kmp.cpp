@@ -1,82 +1,68 @@
-#include<bits/stdc++.h>
+/*
+ * C++ Program to Implement Knuth–Morris–Pratt Algorithm (KMP)
+ */
+#include <iostream>
+#include <cstring>
 using namespace std;
+void preKMP(string pattern, int f[])
+{
+    int m = pattern.length(), k;
+    f[0] = -1;
+    for (int i = 1; i < m; i++)
+    {
+        k = f[i - 1];
+        while (k >= 0)
+        {
+            if (pattern[k] == pattern[i - 1])
+                break;
+            else
+                k = f[k];
+        }
+        f[i] = k + 1;
+    }
+}
+ 
+//check whether target string contains pattern 
+bool KMP(string pattern, string target)
+{
+    int m = pattern.length();
+    int n = target.length();
+    int f[m];     
+    preKMP(pattern, f);     
+    int i = 0;
+    int k = 0;        
+    while (i < n)
+    {
+        if (k == -1)
+        {
+            i++;
+            k = 0;
+        }
+        else if (target[i] == pattern[k])
+        {
+            i++;
+            k++;
+            if (k == m)
+                return 1;
+        }
+        else
+            k = f[k];
+    }
+    return 0;
+}
+ 
 int main()
 {
-	while(1)
-	{
-	string str;
-	cout<<"type the string\n";
-	cin>>str;
-	int len=str.length();
-	cout<<"type the pattern\n";
- string s;
- cin>>s;
-int l=s.length();
-int a[l];                        // time complexity to build this array a is o(n)
-int j=0;                
-int i=1;
-a[0]=0;
-for(int i=1;i<l;i++)         //lcp array is  made for pattern
-{
-	if(s[i]==s[j])
-	{
-		a[i]=j+1;
-		j++;
-	}
-	else
-	{
-		if(j>0)
-		{
-			j=a[j-1];
-			i--;
-		}
-		else
-		a[i]=j;
-	}
-}
-for(int i=0;i<l;i++)
-cout<<a[i]<<" ";
-cout<<"\n";
-//cout<<"\nnow checking occur\n";
-j=0;
-for(int i=0;i<len;i++)             // time complexity to match this pattern a is o(n)
-{
-	if(j==l)
-	{                                          //total=(n+m)  n=legth of string given   m=length=patterm
-		break;
-	}
-	else
-	{
-		if(str[i]==s[j])
-		{
-			j++;
-		}
-		else
-		{
-			if(j==0)
-			{
-				continue;
-			}	
-			else 
-			{
-			 if(i!=0 && j>0)
-			{
-			 j=a[j-1];
-			 i--;
-		    }
-		}
-	}
-}
-}
-	if(j==l)
-	{
-		cout<<"yes\n";
-	}
-		else
-		{
-			cout<<"no\n";
-		}
-	//	cout<<j<<"\n";
-	cout<<"\n";
-}
+    string tar = "san and linux training";
+    string pat = "lin";
+    if (KMP(pat, tar))
+        cout<<"'"<<pat<<"' found in string '"<<tar<<"'"<<endl;
+    else
+        cout<<"'"<<pat<<"' not found in string '"<<tar<<"'"<<endl;
+    pat = "sanfoundry";
+    if (KMP(pat, tar))
+        cout<<"'"<<pat<<"' found in string '"<<tar<<"'"<<endl;
+    else
+        cout<<"'"<<pat<<"' not found in string '"<<tar<<"'"<<endl;
+    return 0;
 }

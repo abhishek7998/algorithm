@@ -2,8 +2,11 @@
 #include <cmath>
 #include <cstdlib>
 using namespace std;
-
-struct node{
+/*
+ * Node Declaration
+ */
+struct node
+{
     int n;
     int degree;
     node* parent;
@@ -13,7 +16,11 @@ struct node{
     char mark;
     char C;
 };
-class FibonacciHeap{
+/*
+ * Class Declaration
+ */
+class FibonacciHeap
+{
     private:
         int nH;
         node *H;
@@ -31,21 +38,34 @@ class FibonacciHeap{
         int Delete_key(node *,int);
         int Cut(node *, node *, node *);
         int Cascase_cut(node *, node *);
-        FibonacciHeap(){
+        FibonacciHeap()
+        {
             H = InitializeHeap();
         }
 };
-node* FibonacciHeap::InitializeHeap(){
+/*
+ * Initialize Heap
+ */
+node* FibonacciHeap::InitializeHeap()
+{
     node* np;
     np = NULL;
     return np;
 }
-node* FibonacciHeap::Create_node(int value){
+/*
+ * Create Node
+ */
+node* FibonacciHeap::Create_node(int value)
+{
     node* x = new node;
     x->n = value;
     return x;
 }
-node* FibonacciHeap::Insert(node* H, node* x){
+/*
+ * Insert Node
+ */
+node* FibonacciHeap::Insert(node* H, node* x)
+{
     x->degree = 0;
     x->parent = NULL;
     x->child = NULL;
@@ -53,7 +73,8 @@ node* FibonacciHeap::Insert(node* H, node* x){
     x->right = x;
     x->mark = 'F';
     x->C = 'N';
-    if (H != NULL){
+    if (H != NULL)
+    {
         (H->left)->right = x;
         x->right = H;
         x->left = H->left;
@@ -61,13 +82,18 @@ node* FibonacciHeap::Insert(node* H, node* x){
         if (x->n < H->n)
             H = x;
     }
-    else{
+    else
+    {
         H = x;
     }
     nH = nH + 1;
     return H;
 }
-int FibonacciHeap::Fibonnaci_link(node* H1, node* y, node* z){
+/*
+ * Link Nodes in Fibonnaci Heap
+ */
+int FibonacciHeap::Fibonnaci_link(node* H1, node* y, node* z)
+{
     (y->left)->right = y->right;
     (y->right)->left = y->left;
     if (z->right == z)
@@ -85,8 +111,11 @@ int FibonacciHeap::Fibonnaci_link(node* H1, node* y, node* z){
         z->child = y;
     z->degree++;
 }
-
-node* FibonacciHeap::Union(node* H1, node* H2){
+/*
+ * Union Nodes in Fibonnaci Heap
+ */
+node* FibonacciHeap::Union(node* H1, node* H2)
+{
     node* np;
     node* H = InitializeHeap();
     H = H1;
@@ -97,24 +126,35 @@ node* FibonacciHeap::Union(node* H1, node* H2){
     H2->left = np;
     return H;
 }
-int FibonacciHeap::Display(node* H){
+/*
+ * Display Fibonnaci Heap
+ */
+int FibonacciHeap::Display(node* H)
+{
     node* p = H;
-    if (p == NULL){
+    if (p == NULL)
+    {
         cout<<"The Heap is Empty"<<endl;
         return 0;
     }
     cout<<"The root nodes of Heap are: "<<endl;
-    do{
+    do
+    {
         cout<<p->n;
         p = p->right;
-        if (p != H){
+        if (p != H)
+        {
             cout<<"-->";
         }
     }
     while (p != H && p->right != NULL);
     cout<<endl;
 }
-node* FibonacciHeap::Extract_Min(node* H1){
+/*
+ * Extract Min Node in Fibonnaci Heap
+ */
+node* FibonacciHeap::Extract_Min(node* H1)
+{
     node* p;
     node* ptr;
     node* z = H1;
@@ -127,9 +167,11 @@ node* FibonacciHeap::Extract_Min(node* H1){
     x = NULL;
     if (z->child != NULL)
         x = z->child;
-    if (x != NULL){
+    if (x != NULL)
+    {
         ptr = x;
-        do{
+        do
+        {
             np = x->right;
             (H1->left)->right = x;
             x->right = H1;
@@ -147,15 +189,19 @@ node* FibonacciHeap::Extract_Min(node* H1){
     H1 = z->right;
     if (z == z->right && z->child == NULL)
         H = NULL;
-    else{
+    else
+    {
         H1 = z->right;
         Consolidate(H1);
     }
     nH = nH - 1;
     return p;
 }
-
-int FibonacciHeap::Consolidate(node* H1){
+/*
+ * Consolidate Node in Fibonnaci Heap
+ */
+int FibonacciHeap::Consolidate(node* H1)
+{
     int d, i;
     float f = (log(nH)) / (log(2));
     int D = f;
@@ -166,12 +212,15 @@ int FibonacciHeap::Consolidate(node* H1){
     node* y;
     node* np;
     node* pt = x;
-    do{
+    do
+    {
         pt = pt->right;
         d = x->degree;
-        while (A[d] != NULL){
+        while (A[d] != NULL)
+        {
             y = A[d];
-            if (x->n > y->n){
+            if (x->n > y->n)
+            {
                 np = x;
                 x = y;
                 y = np;
@@ -189,11 +238,14 @@ int FibonacciHeap::Consolidate(node* H1){
     }
     while (x != H1);
     H = NULL;
-    for (int j = 0; j <= D; j++){
-        if (A[j] != NULL){
+    for (int j = 0; j <= D; j++)
+    {
+        if (A[j] != NULL)
+        {
             A[j]->left = A[j];
             A[j]->right =A[j];
-            if (H != NULL){
+            if (H != NULL)
+            {
                 (H->left)->right = A[j];
                 A[j]->right = H;
                 A[j]->left = H->left;
@@ -201,7 +253,8 @@ int FibonacciHeap::Consolidate(node* H1){
                 if (A[j]->n < H->n)
                 H = A[j];
             }
-            else{
+            else
+            {
                 H = A[j];
             }
             if(H == NULL)
@@ -212,24 +265,32 @@ int FibonacciHeap::Consolidate(node* H1){
     }
 }
 
-int FibonacciHeap::Decrease_key(node*H1, int x, int k){
+/*
+ * Decrease key of Nodes in Fibonnaci Heap
+ */
+int FibonacciHeap::Decrease_key(node*H1, int x, int k)
+{
     node* y;
-    if (H1 == NULL){
+    if (H1 == NULL)
+    {
         cout<<"The Heap is Empty"<<endl;
         return 0;
     }
     node* ptr = Find(H1, x);
-    if (ptr == NULL){
+    if (ptr == NULL)
+    {
         cout<<"Node not found in the Heap"<<endl;
         return 1;
     }
-    if (ptr->n < k){
+    if (ptr->n < k)
+    {
         cout<<"Entered key greater than current key"<<endl;
         return 0;
     }
     ptr->n = k;
     y = ptr->parent;
-    if (y != NULL && ptr->n < y->n){
+    if (y != NULL && ptr->n < y->n)
+    {
         Cut(H1, ptr, y);
         Cascase_cut(H1, y);
     }
@@ -237,7 +298,11 @@ int FibonacciHeap::Decrease_key(node*H1, int x, int k){
         H = ptr;
     return 0;
 }
-int FibonacciHeap::Cut(node* H1, node* x, node* y){
+/*
+ * Cut Nodes in Fibonnaci Heap
+ */
+int FibonacciHeap::Cut(node* H1, node* x, node* y)
+{
     if (x == x->right)
         y->child = NULL;
     (x->left)->right = x->right;
@@ -254,29 +319,43 @@ int FibonacciHeap::Cut(node* H1, node* x, node* y){
     x->parent = NULL;
     x->mark = 'F';
 }
-int FibonacciHeap::Cascase_cut(node* H1, node* y){
+
+/*
+ * Cascade Cutting in Fibonnaci Heap
+ */
+int FibonacciHeap::Cascase_cut(node* H1, node* y)
+{
     node* z = y->parent;
-    if (z != NULL){
+    if (z != NULL)
+    {
         if (y->mark == 'F')
         {
             y->mark = 'T';
 	}
-        else{
+        else
+        {
             Cut(H1, y, z);
             Cascase_cut(H1, z);
         }
     }
 }
-node* FibonacciHeap::Find(node* H, int k){
+
+/*
+ * Find Nodes in Fibonnaci Heap
+ */
+node* FibonacciHeap::Find(node* H, int k)
+{
     node* x = H;
     x->C = 'Y';
     node* p = NULL;
-    if (x->n == k){
+    if (x->n == k)
+    {
         p = x;
         x->C = 'N';
         return p;
     }
-    if (p == NULL){
+    if (p == NULL)
+    {
         if (x->child != NULL )
             p = Find(x->child, k);
         if ((x->right)->C != 'Y' )
@@ -285,7 +364,11 @@ node* FibonacciHeap::Find(node* H, int k){
     x->C = 'N';
     return p;
 }
-int FibonacciHeap::Delete_key(node* H1, int k){
+/*
+ * Delete Nodes in Fibonnaci Heap
+ */
+int FibonacciHeap::Delete_key(node* H1, int k)
+{
     node* np = NULL;
     int t;
     t = Decrease_key(H1, k, -5000);
@@ -297,7 +380,11 @@ int FibonacciHeap::Delete_key(node* H1, int k){
         cout<<"Key not Deleted"<<endl;
     return 0;
 }
-int main(){
+/*
+ * Main Contains Menu
+ */
+int main()
+{
     int n, m, l;
     FibonacciHeap fh;
     node* p;
@@ -305,6 +392,9 @@ int main(){
     H = fh.InitializeHeap();
     while (1)
     {
+        cout<<"----------------------------"<<endl;
+        cout<<"Operations on Binomial heap"<<endl;
+        cout<<"----------------------------"<<endl;
         cout<<"1)Insert Element in the heap"<<endl;
         cout<<"2)Extract Minimum key node"<<endl;
         cout<<"3)Decrease key of a node"<<endl;
